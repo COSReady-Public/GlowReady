@@ -67,12 +67,12 @@ input[type=range] { accent-color: var(--violet); }
 /* Preview */
 .preview { padding: clamp(14px,3vw,28px); display: flex; flex-direction: column; align-items: center; gap: 12px; position: sticky; top: 20px; }
 .pill-example { font-size: 12px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--violet-600); background: var(--tint); border-radius: 999px; padding: 5px 12px; }
-.stage { position: relative; width: min(100%, calc((100vh - 150px) * var(--ar, .8))); }
+/* The canvas always fills the card's width; on short windows the page scrolls. */
+.stage { position: relative; width: 100%; }
 .stage canvas { width: 100%; height: auto; display: block; border-radius: 10px; }
 #ghost { position: absolute; top: 0; left: 0; display: none; pointer-events: none; z-index: 1; }
 #preview { box-shadow: var(--shadow-md); background: #FFFFFF; touch-action: none; user-select: none; -webkit-user-select: none; -webkit-touch-callout: none; outline: 3px solid transparent; outline-offset: 3px; transition: outline-color .15s; cursor: pointer; }
 #preview.is-drop { outline-color: var(--violet); }
-#preview:focus-visible { outline-color: var(--violet); }
 .hint { margin: 0; font-size: 13px; line-height: 1.45; color: var(--text); text-align: center; max-width: 520px; }
 .btn-try { min-height: 44px; padding: 0 18px; border-radius: 999px; border: 1.5px solid #d8cffb; background: var(--tint); color: var(--violet-600); font-weight: 600; font-size: 14.5px; }
 .btn-try:hover { background: #e7e0fc; }
@@ -120,7 +120,7 @@ input[type=range] { accent-color: var(--violet); }
 .fold__txt { display: flex; flex-direction: column; gap: 1px; }
 .fold__title { font-weight: 600; font-size: 14.5px; }
 .fold__sub { font-size: 12.5px; color: var(--text); }
-.fold__chev { color: var(--violet); font-size: 18px; transition: transform .2s ease; font-weight: 700; }
+.fold__chev { width: 16px; height: 16px; flex: none; color: var(--violet); transition: transform .2s ease; }
 .fold__btn[aria-expanded=true] .fold__chev { transform: rotate(180deg); }
 .fold__body { padding: 4px 14px 16px; display: flex; flex-direction: column; gap: 14px; border-top: 1px solid var(--line-soft); }
 .fold__body--adj { padding: 12px 14px 16px; gap: 10px; }
@@ -129,6 +129,8 @@ input[type=range] { accent-color: var(--violet); }
 .field--first { margin-top: 12px; }
 .field__label { font-size: 13.5px; font-weight: 600; }
 .input { min-height: 44px; border-radius: 12px; border: 1.5px solid var(--line); padding: 0 10px; font-family: var(--font-body); font-size: 15px; color: var(--ink); background: #fff; min-width: 0; width: 100%; }
+/* Select: own chevron, kept clear of the border (the native one sits on it). */
+select.input { -webkit-appearance: none; appearance: none; padding-right: 40px; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='%23544d63' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 6l4 4 4-4'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 14px center; background-size: 16px 16px; }
 .pair { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 10px; }
 .switch-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
 .switch-row__label { font-size: 13.5px; font-weight: 600; }

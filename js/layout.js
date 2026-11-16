@@ -127,13 +127,3 @@ export function cellAt(cells, pt) {
 export function minZoom(p, c) {
   return Math.min(c.w / p.w, c.h / p.h) / Math.max(c.w / p.w, c.h / p.h);
 }
-
-/** Axis-aligned bounds of a cell including its frame/border, for keeping decor out. */
-export function cellBounds(c) {
-  if (c.frame) {
-    const { p, b } = c.frame, ext = 12; // rotation slack
-    return { x: c.x - p - ext, y: c.y - p - ext, w: c.w + 2 * p + 2 * ext, h: c.h + p + b + 2 * ext };
-  }
-  const b = c.border || 0;
-  return { x: c.x - b, y: c.y - b, w: c.w + 2 * b, h: c.h + 2 * b };
-}

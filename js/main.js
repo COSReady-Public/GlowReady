@@ -1,6 +1,6 @@
 // Boot and event wiring.
 
-import { FORMATS, TEMPLATES, PRESETS, presetById, cropDefault, disclaimerText } from './presets.js';
+import { FORMATS, TEMPLATES, PRESETS, presetById, cropDefault } from './presets.js';
 import { getState, setState, subscribe, updateSlot, snapshot, defaults } from './state.js';
 import { validate, decodeFile, release, makeSample } from './decode.js';
 import { draw } from './render.js';
@@ -148,12 +148,7 @@ $('preset').addEventListener('change', e => {
 $('label-b').addEventListener('input', e => setState({ labelB: e.target.value.slice(0, 24) }));
 $('label-a').addEventListener('input', e => setState({ labelA: e.target.value.slice(0, 24) }));
 $('studio').addEventListener('input', e => setState({ studio: e.target.value.slice(0, 40) }));
-$('sessions').addEventListener('input', e => {
-  const n = parseInt(e.target.value, 10);
-  setState({ sessions: n > 0 && n < 100 ? String(n) : '' });
-});
 $('note').addEventListener('click', () => setState(s => ({ note: !s.note })));
-$('decor').addEventListener('click', () => setState(s => ({ decor: !s.decor })));
 $('cust-toggle').addEventListener('click', () => setState(s => ({ custOpen: !s.custOpen })));
 $('adj-toggle').addEventListener('click', () => setState(s => ({ adjOpen: !s.adjOpen })));
 
@@ -223,7 +218,7 @@ let drawQueued = false;
 
 function redraw() {
   const s = getState();
-  cells = draw(cv, snapshot(s), { dragKey: s.cvDrag, focusKey: document.activeElement === cv && s.kbShow ? s.kbKey : null });
+  cells = draw(cv, snapshot(s), { dragKey: s.cvDrag });
 }
 
 /** Style / format change: cross-fade from a ghost of the old frame. */
@@ -251,7 +246,6 @@ function transition() {
 
 function applyStageSize() {
   const s = getState();
-  stage.style.setProperty('--ar', (1080 / FORMATS[s.format].h).toFixed(4));
   stage.classList.toggle('is-story', s.format === 'story');
 }
 
@@ -268,8 +262,6 @@ function scheduleDraw() {
   });
 }
 
-cv.addEventListener('focus', scheduleDraw);
-cv.addEventListener('blur', scheduleDraw);
 
 /* ---------- view ---------- */
 
@@ -314,11 +306,7 @@ function render(s) {
     if (el.value !== s[k]) el.value = s[k];
     if (ph && el.placeholder !== ph) el.placeholder = ph;
   });
-  setText($('note-label'), 'Show “' + disclaimerText(s.preset, s.sessions) + '”');
   $('note').setAttribute('aria-checked', String(s.note));
-  setHidden($('sessions-field'), P.disclaimer !== 'sessions');
-  if (!s.sessions && $('sessions').value && document.activeElement !== $('sessions')) $('sessions').value = '';
-  $('decor').setAttribute('aria-checked', String(s.decor));
 
   // Adjust photos
   $('adj-toggle').setAttribute('aria-expanded', String(s.adjOpen));

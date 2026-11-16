@@ -1,6 +1,6 @@
 // Photo slots and settings, in memory only. Single state object + subscribe/notify.
 
-import { presetById, disclaimerText } from './presets.js';
+import { presetById, DEFAULT_DISCLAIMER } from './presets.js';
 
 export function defaults() {
   return {
@@ -11,15 +11,11 @@ export function defaults() {
     template: 'classic',
     preset: 'general',
     labelB: '', labelA: '', studio: '', // '' = use the preset label
-    sessions: '',
     note: true,
-    decor: true, // HANDOFF §7.7: on by default
     adjTarget: 'before',
     custOpen: false, adjOpen: false,
     exportStatus: 'idle', exportMsg: '', showListing: false,
     drag: null, cvDrag: null, // panel row / canvas cell under a dragged file
-    kbKey: null, // photo framed by the keyboard while the canvas has focus
-    kbShow: false, // keyboard framing outline visible (focus came from, or switched to, the keyboard)
   };
 }
 
@@ -53,8 +49,7 @@ export function snapshot(s = state) {
     labelB: s.labelB.trim() ? s.labelB : P.b,
     labelA: s.labelA.trim() ? s.labelA : P.a,
     studio: s.studio.trim(),
-    note: s.note, noteText: disclaimerText(P.id, s.sessions),
-    decor: s.decor,
+    note: s.note, noteText: DEFAULT_DISCLAIMER,
     example: !!((s.before && s.before.isSample) || (s.after && s.after.isSample)),
   };
 }

@@ -2,7 +2,6 @@
 
 import { frame, layout, FONT_BODY as F, FONT_HEAD as HF, PAD } from './layout.js';
 import { drawAdjusted } from './adjust.js';
-import { drawDecor } from './decor.js';
 
 // One reusable offscreen canvas for the Blend fade (drawing is synchronous).
 let fadeCanvas = null;
@@ -19,7 +18,6 @@ function rr(c, x, y, w, h, r) {
 
 /**
  * opts.dragKey: slot highlighted as a drop target (preview only)
- * opts.focusKey: slot outlined for keyboard framing (preview only)
  * Returns the cells, for hit-testing.
  */
 export function draw(cv, s, opts = {}) {
@@ -32,12 +30,6 @@ export function draw(cv, s, opts = {}) {
   c.fillRect(0, 0, W, H);
 
   const L = layout(s, area);
-
-  if (s.decor) {
-    const keepOut = [{ x: 0, y: fr.footTop, w: W, h: H - fr.footTop }];
-    if (L.head) keepOut.push({ x: PAD, y: L.head.y, w: W - PAD * 2, h: L.head.h });
-    drawDecor(c, W, H, L.cells, keepOut);
-  }
 
   if (L.head) {
     const general = s.presetId === 'general';
@@ -87,24 +79,6 @@ export function draw(cv, s, opts = {}) {
     c.lineTo(...L.divider[1]);
     c.stroke();
     c.restore();
-  }
-
-  if (opts.focusKey) {
-    const cell = L.cells.find(x => x.key === opts.focusKey);
-    if (cell) {
-      c.save();
-      c.strokeStyle = '#9666E9';
-      c.lineWidth = 6;
-      if (cell.hit || cell.poly) {
-        c.beginPath();
-        (cell.hit || cell.poly).forEach(([x, y], i) => i ? c.lineTo(x, y) : c.moveTo(x, y));
-        c.closePath();
-      } else {
-        rr(c, cell.x - 3, cell.y - 3, cell.w + 6, cell.h + 6, (cell.r || 0) + 3);
-      }
-      c.stroke();
-      c.restore();
-    }
   }
 
   c.textAlign = 'center';

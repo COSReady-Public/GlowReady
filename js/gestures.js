@@ -1,5 +1,5 @@
 // Framing on the preview: drag to pan, pinch / wheel to zoom, double-tap to switch
-// fill and full photo, click or drop on an empty cell to add a photo, keyboard framing.
+// fill and full photo, click or drop on an empty cell to add a photo.
 
 import { cellAt, minZoom, W } from './layout.js';
 import { cropDefault } from './presets.js';
@@ -37,7 +37,6 @@ export function attachGestures(cv, { getCells, pick, loadFile }) {
 
   cv.addEventListener('pointerdown', e => {
     lastPointerType = e.pointerType || 'mouse';
-    if (getState().kbShow) setState({ kbShow: false });
     const pt = canvasPt(e);
     if (!gesture) {
       const ce = cellUnder(pt);
@@ -124,50 +123,5 @@ export function attachGestures(cv, { getCells, pick, loadFile }) {
   cv.addEventListener('mousemove', e => {
     const c = cellUnder(canvasPt(e));
     cv.style.cursor = c ? (getState()[c.key] ? 'grab' : 'pointer') : 'default';
-  });
-
-  // Keyboard framing: arrows move 2%, +/- zoom x1.1, 0 resets, Tab switches photo,
-  // Enter/Space adds a photo to an empty slot. Framing always starts on Before:
-  // keyboard focus lands there, and after a mouse/touch focus the first Tab
-  // reveals Before instead of skipping to After.
-  cv.addEventListener('focus', () => {
-    let kb = false;
-    try { kb = cv.matches(':focus-visible'); } catch (_) { /* old browsers: wait for a key */ }
-    setState({ kbKey: 'before', kbShow: kb });
-  });
-  cv.addEventListener('blur', () => setState({ kbKey: null, kbShow: false }));
-  cv.addEventListener('keydown', e => {
-    if (!getState().kbShow) {
-      setState({ kbKey: 'before', kbShow: true });
-      if (e.key === 'Tab' && !e.shiftKey) { e.preventDefault(); return; }
-      if (e.key === 'Tab') return; // Shift+Tab leaves as usual
-    }
-    const s = getState(), key = s.kbKey || 'before', p = s[key];
-    if (e.key === 'Tab') {
-      // Before -> After inside the canvas; past that, Tab leaves as usual (no keyboard trap).
-      if (!e.shiftKey && key === 'before') { e.preventDefault(); setState({ kbKey: 'after' }); }
-      else if (e.shiftKey && key === 'after') { e.preventDefault(); setState({ kbKey: 'before' }); }
-      return;
-    }
-    if (!p) {
-      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); pick(key); }
-      return;
-    }
-    const cell = getCells().find(c => c.key === key);
-    if (!cell) return;
-    const step = .02;
-    let patch = null;
-    switch (e.key) {
-      case 'ArrowLeft': patch = { tx: clamp01((p.tx == null ? .5 : p.tx) + step) }; break;
-      case 'ArrowRight': patch = { tx: clamp01((p.tx == null ? .5 : p.tx) - step) }; break;
-      case 'ArrowUp': patch = { crop: clamp01(p.crop / 100 + step) * 100 }; break;
-      case 'ArrowDown': patch = { crop: clamp01(p.crop / 100 - step) * 100 }; break;
-      case '+': case '=': patch = { zoom: Math.min(5, (p.zoom || 1) * 1.1) }; break;
-      case '-': case '_': case '−': patch = { zoom: Math.max(minZoom(p, cell), (p.zoom || 1) / 1.1) }; break;
-      case '0': patch = { zoom: 1, tx: .5, crop: cropDefault(s.preset, p.w, p.h) }; break;
-      default: return;
-    }
-    e.preventDefault();
-    updateSlot(key, patch);
   });
 }

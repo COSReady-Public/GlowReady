@@ -3,7 +3,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 
 import { frame, layout, cellAt, minZoom, isSideBySide, W } from '../js/layout.js';
-import { FORMATS, TEMPLATES, PRESETS, disclaimerText, cropDefault } from '../js/presets.js';
+import { FORMATS, TEMPLATES, PRESETS, cropDefault } from '../js/presets.js';
 
 const portrait = { w: 1500, h: 2000 };
 const landscape = { w: 2000, h: 1500 };
@@ -13,7 +13,7 @@ function snap(format, template, pair, extra = {}) {
   const [before, after] = PAIRS[pair];
   return { format, template, presetId: 'general', presetName: 'General', before, after,
     labelB: 'Before', labelA: 'After', studio: '', note: true, noteText: 'Individual results may vary.',
-    decor: true, example: false, ...extra };
+    example: false, ...extra };
 }
 
 for (const format of Object.keys(FORMATS)) {
@@ -95,21 +95,13 @@ test('minZoom shows the whole photo', () => {
   assert.equal(z, 0.5);
 });
 
-test('presets: 19 service presets plus Timeline, labels fit 24 characters', () => {
-  assert.equal(PRESETS.length, 20);
-  assert.ok(PRESETS.find(p => p.id === 'timeline' && p.b === 'Day 0' && p.a === 'Today'));
+test('presets: the 19 service presets, labels fit 24 characters', () => {
+  assert.equal(PRESETS.length, 19);
+  assert.equal(PRESETS[0].id, 'general');
   for (const p of PRESETS) {
     assert.ok(p.b.length <= 24 && p.a.length <= 24, p.id);
   }
   assert.equal(cropDefault('general', 100, 200), 35);
   assert.equal(cropDefault('general', 200, 100), 50);
   assert.equal(cropDefault('nail', 100, 200), 50);
-});
-
-test('disclaimers per industry', () => {
-  assert.equal(disclaimerText('general', '4'), 'Individual results may vary.');
-  assert.equal(disclaimerText('injectables', ''), 'Individual results may vary.');
-  assert.equal(disclaimerText('injectables', '3'), 'Individual results may vary. Results shown after 3 sessions.');
-  assert.equal(disclaimerText('facial', '1'), 'Individual results may vary. Results shown after 1 session.');
-  assert.equal(disclaimerText('teeth', '3'), 'Cosmetic result. Individual results may vary.');
 });

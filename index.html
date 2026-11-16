@@ -81,8 +81,7 @@
     <span class="pill-example" id="example-pill" hidden>Example</span>
     <div class="stage" id="stage">
       <canvas id="ghost" aria-hidden="true"></canvas>
-      <canvas id="preview" width="1080" height="1350" role="img" tabindex="0" aria-label="Preview of Post before-and-after image" aria-describedby="kb-help"></canvas>
-      <span id="kb-help" class="sr-only">Press Enter to add a photo. Arrow keys move the photo, plus and minus zoom, 0 resets, Tab switches between the before and after photo.</span>
+      <canvas id="preview" width="1080" height="1350" role="img" aria-label="Preview of Post before-and-after image"></canvas>
     </div>
     <p class="hint" id="hint">Click a Before or After box to add a photo, or drop one onto it</p>
     <button type="button" class="btn-try" id="try-example">Try an example</button>
@@ -131,7 +130,7 @@
       <div class="fold">
         <button type="button" class="fold__btn" id="cust-toggle" aria-expanded="false" aria-controls="cust-body">
           <span class="fold__txt"><span class="fold__title">Labels &amp; details</span><span class="fold__sub">Service, labels, studio name, disclaimer</span></span>
-          <span class="fold__chev" aria-hidden="true">⌄</span>
+          <svg class="fold__chev" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6l4 4 4-4"/></svg>
         </button>
         <div class="fold__body" id="cust-body" hidden>
           <label class="field field--first">
@@ -156,21 +155,13 @@
             <span id="note-label" class="switch-row__label">Show “Individual results may vary.”</span>
             <button type="button" class="switch" id="note" role="switch" aria-checked="true" aria-labelledby="note-label"><span class="switch__knob"></span></button>
           </div>
-          <label class="field" id="sessions-field" hidden>
-            <span class="field__label">Number of sessions (optional)</span>
-            <input type="number" class="input" id="sessions" min="1" max="99" step="1" inputmode="numeric" placeholder="e.g. 3">
-          </label>
-          <div class="switch-row">
-            <span id="decor-label" class="switch-row__label">Decor</span>
-            <button type="button" class="switch" id="decor" role="switch" aria-checked="true" aria-labelledby="decor-label"><span class="switch__knob"></span></button>
-          </div>
         </div>
       </div>
 
       <div class="fold">
         <button type="button" class="fold__btn" id="adj-toggle" aria-expanded="false" aria-controls="adj-body">
           <span class="fold__txt"><span class="fold__title">Adjust photos</span><span class="fold__sub">Exposure, contrast, lighting, colour</span></span>
-          <span class="fold__chev" aria-hidden="true">⌄</span>
+          <svg class="fold__chev" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6l4 4 4-4"/></svg>
         </button>
         <div class="fold__body fold__body--adj" id="adj-body" hidden>
           <div class="adj-seg" id="adj-target">
