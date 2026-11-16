@@ -200,6 +200,24 @@ select.input { -webkit-appearance: none; appearance: none; padding-right: 40px; 
 .foot-nav__legal { color: var(--muted); }
 .noscript { max-width: 1240px; margin: 20px auto 0; padding: 14px 20px; background: #fff; border: 1px solid var(--line); border-radius: 12px; font-size: 14.5px; color: var(--text); }
 
+/* Desktop: the whole editor 10% smaller, both sides, centred.
+   The panel scales with zoom. The preview keeps zoom off the canvas: its width
+   shrinks instead, so the gesture maths reads the real canvas size. */
+@media (min-width: 741px) {
+  .editor { grid-template-columns: calc((100% - 400px) * .9) 342px; gap: 18px; justify-content: center; }
+  .preview { padding: clamp(12.6px,2.7vw,25.2px); gap: 10.8px; border-radius: calc(var(--radius) * .9); }
+  .preview > :not(.stage) { zoom: .9; }
+  .stage canvas { border-radius: 9px; }
+  .panel { zoom: .9; top: calc(20px / .9); max-height: calc((100vh - 40px) / .9); }
+  /* Keep the mockup's alignment at the new size: the sections below and the
+     footer take the same 90% of the content width, centred, so their edges
+     line up with the editor's; the header shrinks the same way and stays a
+     little narrower, as in the mockup. Extra side padding = 5% of the box,
+     plus 90% of the usual padding. */
+  .below, .site-footer__in { padding-left: calc(clamp(12px,3vw,24px) * .9 + min(100%, 1240px) * .05); padding-right: calc(clamp(12px,3vw,24px) * .9 + min(100%, 1240px) * .05); }
+  .site-header__in { padding-left: calc(clamp(16px,4vw,28px) * .9 + min(100%, 1180px) * .05); padding-right: calc(clamp(16px,4vw,28px) * .9 + min(100%, 1180px) * .05); }
+}
+
 /* Mobile: one column, preview first, nothing sticky, panel doesn't scroll inside */
 @media (max-width: 740px) {
   .editor { grid-template-columns: minmax(0,1fr); }
