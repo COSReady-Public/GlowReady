@@ -23,17 +23,10 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: actions/configure-pages@v5
-      # Publish only the app. cosready.ai/glowready proxies to this site
-      # (Landing repo, next.config rewrites): /glowready → cosready.html and
-      # /glowready/* → the files below. The browser stays on /glowready (no
-      # trailing slash), so cosready.html carries absolute /glowready/ paths;
-      # index.html keeps relative paths for visits to the Pages URL itself.
+      # Publish only the app, with versioned CSS/JS URLs and cosready.html for
+      # the cosready.ai/glowready proxy. See scripts/build-pages.sh.
       - name: Build site
-        run: |
-          mkdir _site
-          cp -R index.html css js assets LICENSE _site/
-          sed -E 's#(href|src)="(css|js|assets)/#\1="/glowready/\2/#g' index.html > _site/cosready.html
-          grep -q 'href="/glowready/css/app.css"' _site/cosready.html
+        run: scripts/build-pages.sh _site "${GITHUB_SHA::7}"
       - uses: actions/upload-pages-artifact@v3
         with:
           path: _site
