@@ -78,7 +78,9 @@ test('file checks answer in the current language', () => {
 
 // Runs js/locale.js against a fake page.
 const localeJs = readFileSync(new URL('../js/locale.js', import.meta.url), 'utf8');
+let saved;
 function pick(cookie, languages, search = '') {
+  saved = undefined;
   const attrs = {}, classes = new Set();
   const documentElement = {
     set lang(v) { attrs.lang = v; },
@@ -86,7 +88,7 @@ function pick(cookie, languages, search = '') {
     classList: { add: c => classes.add(c), remove: c => classes.delete(c) },
   };
   vm.runInNewContext(localeJs, {
-    document: { cookie, documentElement },
+    document: { get cookie() { return cookie; }, set cookie(v) { saved = v; }, documentElement },
     window: { navigator: { languages, language: languages[0] }, location: { search } },
     setTimeout: () => {},
   });
@@ -108,6 +110,16 @@ test('a ?lang= in the URL wins', () => {
   assert.equal(pick('', ['en-US'], '?lang=zh-Hant'), 'zh-TW');
   assert.equal(pick('NEXT_LOCALE=zh-CN', ['zh-CN'], '?lang=en'), 'en');
   assert.equal(pick('NEXT_LOCALE=zh-TW', ['en-US'], '?lang=xx'), 'zh-TW'); // unknown value: ignored
+  assert.equal(saved, undefined);
+});
+
+test('a ?lang= is saved like cosready.ai does', () => {
+  pick('', ['en-US'], '?lang=cn');
+  assert.equal(saved, 'NEXT_LOCALE=zh-CN; path=/; max-age=31536000; samesite=lax');
+  pick('', ['en-US'], '?lang=tw');
+  assert.equal(saved, 'NEXT_LOCALE=zh-TW; path=/; max-age=31536000; samesite=lax');
+  pick('NEXT_LOCALE=zh-CN', ['en-US']);
+  assert.equal(saved, undefined); // no ?lang=: nothing written
 });
 
 test('otherwise the system language', () => {

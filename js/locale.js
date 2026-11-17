@@ -1,7 +1,8 @@
 // Picks the page language before anything is drawn (a plain, blocking script).
 //
-// 1. A ?lang= in the URL, same values as cosready.ai: cn / zh / zh-CN for
-//    Simplified, tw / zh-TW / zh-Hant / zh-HK for Traditional, en.
+// 1. A ?lang= in the URL, same as cosready.ai: cn / zh / zh-CN for
+//    Simplified, tw / zh-TW / zh-Hant / zh-HK for Traditional, en. Like the
+//    site, it is also saved in the NEXT_LOCALE cookie for a year.
 // 2. A language the visitor picked on cosready.ai: the site keeps it in the
 //    NEXT_LOCALE cookie. The site also writes "en" there for every visitor,
 //    so English counts only when cosr_lang_chosen marks it as their own pick.
@@ -25,6 +26,7 @@
     var chosen = /(?:^|;\s*)cosr_lang_chosen=1(?:;|$)/.test(c);
     if (u) {
       L = u;
+      document.cookie = 'NEXT_LOCALE=' + u + '; path=/; max-age=31536000; samesite=lax';
     } else if (v === 'zh-CN' || v === 'zh-TW' || (v === 'en' && chosen)) {
       L = v;
     } else {
