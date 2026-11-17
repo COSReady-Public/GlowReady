@@ -1,17 +1,17 @@
 // File checks, EXIF-aware decode, downsampling and thumbnails. Nothing leaves the browser.
 
+import { t } from './i18n.js';
+
 export const MAX_BYTES = 20971520; // 20 MiB
 export const MAX_PIXELS = 48000000; // 48 MP
 export const MAX_SIDE = 2560;
 
-const MSG_OPEN = 'This photo could not be opened. Try another file.';
-
 /** Returns an error message, or null when the file may be decoded. */
 export function validate(file) {
-  const n = (file.name || '').toLowerCase(), t = (file.type || '').toLowerCase();
-  if (/heic|heif/.test(t) || /\.(heic|heif)$/.test(n)) return 'Choose a JPG, PNG, or WebP photo. HEIC photos need converting first — export or share the photo as JPEG, then try again.';
-  if (!/^image\/(jpeg|png|webp)$/.test(t)) return 'Choose a JPG, PNG, or WebP photo.';
-  if (file.size > MAX_BYTES) return 'This file is too large. Compress it to 20 MiB or less and try again.';
+  const n = (file.name || '').toLowerCase(), type = (file.type || '').toLowerCase();
+  if (/heic|heif/.test(type) || /\.(heic|heif)$/.test(n)) return t('errHeic');
+  if (!/^image\/(jpeg|png|webp)$/.test(type)) return t('errType');
+  if (file.size > MAX_BYTES) return t('errSize');
   return null;
 }
 
@@ -41,12 +41,12 @@ export function makeThumb(img, w, h) {
 /** Decode a validated file. Resolves { img, w, h, thumb } or rejects with a user-facing message. */
 export async function decodeFile(file) {
   let src;
-  try { src = await decodeRaw(file); } catch (e) { throw new Error(MSG_OPEN); }
+  try { src = await decodeRaw(file); } catch (e) { throw new Error(t('errOpen')); }
   const w = src.naturalWidth || src.width, h = src.naturalHeight || src.height;
-  if (!w || !h) { release(src); throw new Error(MSG_OPEN); }
+  if (!w || !h) { release(src); throw new Error(t('errOpen')); }
   if (w * h > MAX_PIXELS) {
     release(src);
-    throw new Error('This photo has too many pixels. Resize it to 48 megapixels or less and try again.');
+    throw new Error(t('errPixels'));
   }
   let img = src, iw = w, ih = h;
   const m = Math.max(w, h);

@@ -37,8 +37,6 @@ export const PRESETS = [
   { id: 'tattoo', name: 'Tattoo removal', b: 'Before', a: 'After', crop: 50 },
 ];
 
-export const DEFAULT_DISCLAIMER = 'Individual results may vary.';
-
 export function presetById(id) {
   return PRESETS.find(p => p.id === id) || PRESETS[0];
 }

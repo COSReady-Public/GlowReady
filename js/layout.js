@@ -2,21 +2,27 @@
 // The same cells drive drawing (render.js) and hit-testing (gestures.js).
 
 import { FORMATS } from './presets.js';
+import { getLocale, t } from './i18n.js';
 
 export const W = 1080;
 export const PAD = 42;
 export const TOP = 42;
 export const GAP = 14;
 
-export const FONT_BODY = '"DM Sans", system-ui, -apple-system, sans-serif';
-export const FONT_HEAD = '"Schibsted Grotesk", ' + FONT_BODY;
+// DM Sans has no Chinese glyphs: Chinese text uses these before the system font.
+const CJK = {
+  'zh-CN': '"PingFang SC", "Noto Sans SC", "Microsoft YaHei", ',
+  'zh-TW': '"PingFang TC", "Noto Sans TC", "Microsoft JhengHei", ',
+};
+export const fontBody = () => '"DM Sans", ' + (CJK[getLocale()] || '') + 'system-ui, -apple-system, sans-serif';
+export const fontHead = () => '"Schibsted Grotesk", ' + fontBody();
 
 /** Footer lines, stacked bottom-up visually but listed top-down. */
 export function footerLines(snap) {
-  const lines = [];
-  if (snap.studio) lines.push({ t: snap.studio, font: '700 34px ' + FONT_BODY, color: '#1C1430', h: 50 });
-  if (snap.note) lines.push({ t: snap.noteText, font: '400 24px ' + FONT_BODY, color: '#544d63', h: 38 });
-  lines.push({ t: (snap.example ? 'Example · ' : '') + 'Made with GlowReady · by COSReady', font: '500 20px ' + FONT_BODY, color: '#8b8499', h: 32 });
+  const lines = [], F = fontBody();
+  if (snap.studio) lines.push({ t: snap.studio, font: '700 34px ' + F, color: '#1C1430', h: 50 });
+  if (snap.note) lines.push({ t: snap.noteText, font: '400 24px ' + F, color: '#544d63', h: 38 });
+  lines.push({ t: t(snap.example ? 'cvExampleCredit' : 'cvCredit'), font: '500 20px ' + F, color: '#8b8499', h: 32 });
   return lines;
 }
 
@@ -24,7 +30,7 @@ export function footerLines(snap) {
 export function frame(snap) {
   const H = FORMATS[snap.format].h;
   const lines = footerLines(snap);
-  const footH = 26 + lines.reduce((t, l) => t + l.h, 0) + 24;
+  const footH = 26 + lines.reduce((sum, l) => sum + l.h, 0) + 24;
   const areaH = H - TOP - footH;
   return { W, H, lines, footH, footTop: TOP + areaH, area: { x: PAD, y: TOP, w: W - PAD * 2, h: areaH } };
 }
@@ -73,10 +79,10 @@ export function layout(snap, A, gap = GAP) {
         { ...A, key: 'after', r: 0, poly: [[x, l], [x + w, r], [x + w, y + h], [x, y + h]], labelAt: 'bl', wm: true },
       ] };
     }
-    const t = x + w * .6, b = x + w * .4;
-    return { divider: [[t, y], [b, y + h]], cells: [
-      { ...A, key: 'before', r: 0, poly: [[x, y], [t, y], [b, y + h], [x, y + h]] },
-      { ...A, key: 'after', r: 0, poly: [[t, y], [x + w, y], [x + w, y + h], [b, y + h]], labelAt: 'tr', wm: true },
+    const top = x + w * .6, b = x + w * .4;
+    return { divider: [[top, y], [b, y + h]], cells: [
+      { ...A, key: 'before', r: 0, poly: [[x, y], [top, y], [b, y + h], [x, y + h]] },
+      { ...A, key: 'after', r: 0, poly: [[top, y], [x + w, y], [x + w, y + h], [b, y + h]], labelAt: 'tr', wm: true },
     ] };
   }
 

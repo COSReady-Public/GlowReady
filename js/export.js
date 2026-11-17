@@ -1,6 +1,7 @@
 // PNG encoding and download, plus the anonymous export counter.
 
 import { draw } from './render.js';
+import { t } from './i18n.js';
 
 const VERSION = '1.0';
 
@@ -15,7 +16,7 @@ export function exportPNG(snap, isCurrent = () => true) {
       draw(cv, snap);
       cv.toBlob(blob => {
         if (!isCurrent()) return resolve(false);
-        if (!blob) return reject(new Error('Could not create the PNG. Try again.'));
+        if (!blob) return reject(new Error(t('errCreate')));
         try {
           const url = URL.createObjectURL(blob), a = document.createElement('a');
           a.href = url;
@@ -26,11 +27,11 @@ export function exportPNG(snap, isCurrent = () => true) {
           setTimeout(() => URL.revokeObjectURL(url), 5000);
           resolve(true);
         } catch (e) {
-          reject(new Error('Could not start the download. Try again.'));
+          reject(new Error(t('errDownload')));
         }
       }, 'image/png');
     } catch (e) {
-      reject(new Error('Could not create the PNG. Try again.'));
+      reject(new Error(t('errCreate')));
     }
   });
 }

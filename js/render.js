@@ -1,10 +1,13 @@
 // draw(canvas, snapshot, opts): the one renderer behind the live preview and the export.
 
-import { frame, layout, FONT_BODY as F, FONT_HEAD as HF, PAD } from './layout.js';
+import { frame, layout, fontBody, fontHead, PAD } from './layout.js';
+import { t } from './i18n.js';
 import { drawAdjusted } from './adjust.js';
 
 // One reusable offscreen canvas for the Blend fade (drawing is synchronous).
 let fadeCanvas = null;
+// Canvas fonts for the current language, set at the start of each draw.
+let F = fontBody(), HF = fontHead();
 
 function rr(c, x, y, w, h, r) {
   c.beginPath();
@@ -21,6 +24,7 @@ function rr(c, x, y, w, h, r) {
  * Returns the cells, for hit-testing.
  */
 export function draw(cv, s, opts = {}) {
+  F = fontBody(); HF = fontHead();
   const fr = frame(s);
   const { W, H, lines, area } = fr;
   if (cv.width !== W) cv.width = W;
@@ -38,11 +42,11 @@ export function draw(cv, s, opts = {}) {
     if (!general) {
       c.font = '700 22px ' + F;
       c.fillStyle = '#8458DD';
-      c.fillText('BEFORE & AFTER', PAD, L.head.y + 26);
+      c.fillText(t('cvKicker'), PAD, L.head.y + 26);
     }
     c.font = '800 66px ' + HF;
     c.fillStyle = '#1C1430';
-    c.fillText(general ? 'Before & after' : s.presetName, PAD, L.head.y + L.head.h - 34, W - PAD * 2);
+    c.fillText(general ? t('cvGeneral') : s.presetName, PAD, L.head.y + L.head.h - 34, W - PAD * 2);
   }
 
   const ph = { before: [s.before, s.labelB], after: [s.after, s.labelA] };
@@ -50,10 +54,10 @@ export function draw(cv, s, opts = {}) {
     const [p, label] = ph[cell.key];
     if (!cell.fade) return drawCell(c, cell, p, label, opts);
     // Blend: render the after photo offscreen, fade it in with destination-in.
-    const t = fadeCanvas || (fadeCanvas = document.createElement('canvas'));
-    if (t.width !== W) t.width = W;
-    if (t.height !== H) t.height = H;
-    const tc = t.getContext('2d');
+    const fc = fadeCanvas || (fadeCanvas = document.createElement('canvas'));
+    if (fc.width !== W) fc.width = W;
+    if (fc.height !== H) fc.height = H;
+    const tc = fc.getContext('2d');
     tc.globalCompositeOperation = 'source-over';
     tc.clearRect(0, 0, W, H);
     drawCell(tc, { ...cell, wm: false, noLabel: true }, p, label, opts);
@@ -66,7 +70,7 @@ export function draw(cv, s, opts = {}) {
     tc.globalCompositeOperation = 'destination-in';
     tc.fillStyle = g;
     tc.fillRect(0, 0, W, H);
-    c.drawImage(t, 0, 0);
+    c.drawImage(fc, 0, 0);
     drawCell(c, { ...cell, skipPhoto: true }, p, label, opts);
   });
 
@@ -152,11 +156,11 @@ function drawCell(c, cell, p, label, opts) {
       c.stroke();
       c.fillStyle = '#1C1430';
       c.font = '700 ' + (sm ? 22 : 30) + 'px ' + F;
-      c.fillText((cell.key === 'before' ? 'Add before' : 'Add after') + ' photo', ctr[0], ctr[1] + (sm ? 14 : 18));
+      c.fillText(t(cell.key === 'before' ? 'cvAddBefore' : 'cvAddAfter'), ctr[0], ctr[1] + (sm ? 14 : 18));
       if (!sm) {
         c.fillStyle = '#8b8499';
         c.font = '500 22px ' + F;
-        c.fillText('Click or drop · JPG, PNG, WebP', ctr[0], ctr[1] + 56);
+        c.fillText(t('cvClickOrDrop'), ctr[0], ctr[1] + 56);
       }
     } else {
       const k = Math.max(w / p.w, h / p.h) * (p.zoom || 1), dw = p.w * k, dh = p.h * k;

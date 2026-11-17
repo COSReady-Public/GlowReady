@@ -7,10 +7,14 @@ import { draw } from './render.js';
 import { attachGestures } from './gestures.js';
 import { exportPNG, countExport } from './export.js';
 import { ADJUSTMENTS, supportsCanvasFilter } from './adjust.js';
+import { t, presetText, translatePage } from './i18n.js';
 
 const $ = id => document.getElementById(id);
 const KEYS = ['before', 'after'];
 const other = k => (k === 'before' ? 'after' : 'before');
+
+// Chinese visitors: swap the page copy before the editor is built.
+translatePage();
 
 const cv = $('preview'), ghost = $('ghost'), stage = $('stage');
 const rev = { before: 0, after: 0 };
@@ -122,12 +126,12 @@ const segBtn = (cls, id, label, extra) => {
   return b;
 };
 Object.entries(FORMATS).forEach(([id, f]) => {
-  const b = segBtn('seg__btn', id, f.label, f.dims);
+  const b = segBtn('seg__btn', id, t('fmt.' + id), f.dims);
   b.addEventListener('click', () => setState({ format: id }));
   $('formats').appendChild(b);
 });
-TEMPLATES.forEach(([id, label]) => {
-  const b = segBtn('style-btn', id, label);
+TEMPLATES.forEach(([id]) => {
+  const b = segBtn('style-btn', id, t('tpl.' + id));
   b.addEventListener('click', () => setState({ template: id }));
   $('styles').appendChild(b);
 });
@@ -137,7 +141,7 @@ TEMPLATES.forEach(([id, label]) => {
 PRESETS.forEach(p => {
   const o = document.createElement('option');
   o.value = p.id;
-  o.textContent = p.name;
+  o.textContent = presetText(p).name;
   $('preset').appendChild(o);
 });
 $('preset').addEventListener('change', e => {
@@ -157,11 +161,11 @@ $('adj-toggle').addEventListener('click', () => setState(s => ({ adjOpen: !s.adj
 // Safari < 18 has no ctx.filter; adjust.js then uses a per-pixel fallback.
 supportsCanvasFilter();
 const sliderEls = {};
-ADJUSTMENTS.forEach(([id, label]) => {
+ADJUSTMENTS.forEach(([id]) => {
   const wrap = document.createElement('label');
   wrap.className = 'slider';
   wrap.innerHTML = '<span class="slider__row"><span></span><span></span></span><input type="range" min="-50" max="50" step="1" value="0">';
-  wrap.querySelector('.slider__row span').textContent = label;
+  wrap.querySelector('.slider__row span').textContent = t('adj.' + id);
   const input = wrap.querySelector('input');
   input.addEventListener('input', () => {
     const k = getState().adjTarget;
@@ -194,12 +198,12 @@ $('download').addEventListener('click', () => {
   const s = getState();
   if (!canDownload(s)) return;
   const r = ++exportRev, snap = snapshot(s); // never re-read live state mid-export
-  setState({ exportStatus: 'preparing', exportMsg: 'Preparing PNG…' });
+  setState({ exportStatus: 'preparing', exportMsg: t('preparingPng') });
   setTimeout(() => {
     if (r !== exportRev) return;
     exportPNG(snap, () => r === exportRev).then(done => {
       if (!done || r !== exportRev) return;
-      setState({ exportStatus: 'ready', exportMsg: 'PNG ready. Check your downloads.', showListing: true });
+      setState({ exportStatus: 'ready', exportMsg: t('statusReady'), showListing: true });
       countExport(snap);
     }, e => {
       if (r === exportRev) setState({ exportStatus: 'error', exportMsg: e.message });
@@ -266,17 +270,15 @@ function scheduleDraw() {
 /* ---------- view ---------- */
 
 function setHidden(el, hidden) { if (el.hidden !== hidden) el.hidden = hidden; }
-function setText(el, t) { if (el.textContent !== t) el.textContent = t; }
+function setText(el, text) { if (el.textContent !== text) el.textContent = text; }
 
 function render(s) {
-  const P = presetById(s.preset), snap = snapshot(s);
+  const P = presetText(presetById(s.preset)), snap = snapshot(s), fmt = t('fmt.' + s.format);
 
   setHidden($('example-pill'), !snap.example);
   setHidden($('try-example'), !!(s.before || s.after));
-  setText($('hint'), s.before && s.after
-    ? 'Drag to move · Pinch or scroll to zoom · Double-tap to switch fill and full photo'
-    : 'Click a Before or After box to add a photo, or drop one onto it');
-  cv.setAttribute('aria-label', 'Preview of ' + FORMATS[s.format].label + ' before-and-after image' + (snap.example ? ' (example)' : ''));
+  setText($('hint'), t(s.before && s.after ? 'hintReady' : 'hintEmpty'));
+  cv.setAttribute('aria-label', t(snap.example ? 'previewAltExample' : 'previewAlt', { format: fmt }));
   cv.classList.toggle('is-drop', !!s.cvDrag);
 
   KEYS.forEach(key => {
@@ -285,8 +287,8 @@ function render(s) {
     const loading = s.loading[key];
     btn.classList.toggle('is-filled', !!p);
     btn.classList.toggle('is-drag', s.drag === key);
-    btn.setAttribute('aria-label', loading ? 'Loading photo…' : (p ? 'Replace ' : 'Add ') + key + ' photo');
-    setText(root.querySelector('.slot__action'), loading ? 'Loading…' : (p ? 'Replace' : 'Add photo'));
+    btn.setAttribute('aria-label', t(loading ? 'loadingPhoto' : (p ? 'replace' : 'add') + (key === 'before' ? 'BeforePhoto' : 'AfterPhoto')));
+    setText(root.querySelector('.slot__action'), t(loading ? 'loadingShort' : (p ? 'replace' : 'addPhoto')));
     setHidden(thumb, !p);
     const bg = p && p.thumb ? 'url("' + p.thumb + '")' : 'none';
     if (thumb.style.backgroundImage !== bg) thumb.style.backgroundImage = bg;
@@ -318,16 +320,16 @@ function render(s) {
     if (+el.input.value !== v) el.input.value = v;
     setText(el.value, v > 0 ? '+' + v : String(v));
   });
-  setText($('adj-copy'), 'Apply to ' + other(s.adjTarget) + ' photo');
+  setText($('adj-copy'), t(s.adjTarget === 'before' ? 'applyToAfter' : 'applyToBefore'));
   setHidden($('adj-reset'), !(tp && ADJUSTMENTS.some(([id]) => A[id])));
 
   // Download
   const ok = canDownload(s);
   $('download').setAttribute('aria-disabled', String(!ok));
-  setText($('download'), s.exportStatus === 'preparing' ? 'Preparing PNG…' : 'Download PNG');
+  setText($('download'), t(s.exportStatus === 'preparing' ? 'preparingPng' : 'downloadPng'));
   const status = $('status');
-  setText(status, s.exportMsg || (s.loading.before || s.loading.after ? 'Loading photo…'
-    : (s.before && s.after ? 'Downloads a ' + FORMATS[s.format].label + ' PNG.' : 'Add both photos to download.')));
+  setText(status, s.exportMsg || (s.loading.before || s.loading.after ? t('loadingPhoto')
+    : (s.before && s.after ? t('statusDownloads', { format: fmt }) : t('statusAddBoth'))));
   status.classList.toggle('is-error', s.exportStatus === 'error');
   status.classList.toggle('is-ready', s.exportStatus === 'ready');
   setHidden($('listing'), !s.showListing);
@@ -337,6 +339,7 @@ function render(s) {
 
 subscribe(render);
 render(getState());
+document.documentElement.classList.remove('i18n-pending'); // locale.js hid the page until now
 
 // Redraw once the canvas fonts are ready.
 if (document.fonts) {

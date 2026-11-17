@@ -1,6 +1,7 @@
 // Photo slots and settings, in memory only. Single state object + subscribe/notify.
 
-import { presetById, DEFAULT_DISCLAIMER } from './presets.js';
+import { presetById } from './presets.js';
+import { t, presetText } from './i18n.js';
 
 export function defaults() {
   return {
@@ -42,14 +43,14 @@ export function updateSlot(key, patch) {
 
 /** Immutable view handed to the renderer; export takes one at click time. */
 export function snapshot(s = state) {
-  const P = presetById(s.preset);
+  const P = presetById(s.preset), T = presetText(P);
   return {
-    format: s.format, template: s.template, presetId: P.id, presetName: P.name,
+    format: s.format, template: s.template, presetId: P.id, presetName: T.name,
     before: s.before, after: s.after,
-    labelB: s.labelB.trim() ? s.labelB : P.b,
-    labelA: s.labelA.trim() ? s.labelA : P.a,
+    labelB: s.labelB.trim() ? s.labelB : T.b,
+    labelA: s.labelA.trim() ? s.labelA : T.a,
     studio: s.studio.trim(),
-    note: s.note, noteText: DEFAULT_DISCLAIMER,
+    note: s.note, noteText: t('disclaimer'),
     example: !!((s.before && s.before.isSample) || (s.after && s.after.isSample)),
   };
 }

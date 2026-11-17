@@ -3,6 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="js/locale.js"></script>
 <title>Free Before &amp; After Photo Editor for Salons | GlowReady</title>
 <meta name="description" content="Make before and after photos for Instagram in 30 seconds. Free, no signup, photos stay on your device. For lash, brow, skin, hair and nail pros. By COSReady.">
 <link rel="canonical" href="https://cosready.ai/glowready">
@@ -65,11 +66,11 @@
       <span class="brand__name">GlowReady</span>
       <span class="brand__by">by <a href="https://cosready.ai/?utm_source=glowready&amp;utm_medium=app&amp;utm_campaign=header" target="_blank" rel="noopener"><img src="assets/cosready-mark.png" alt="" width="18" height="16">COSReady</a></span>
     </div>
-    <span class="pill-free">Free · No signup</span>
+    <span class="pill-free" data-i18n="freePill">Free · No signup</span>
   </div>
 </header>
 
-<h1 class="sr-only">Free before and after photo editor for beauty professionals</h1>
+<h1 class="sr-only" data-i18n="h1">Free before and after photo editor for beauty professionals</h1>
 
 <noscript><p class="noscript">GlowReady needs JavaScript to edit photos. Turn JavaScript on, or open this page in Safari, Chrome, Firefox or Edge.</p></noscript>
 
@@ -77,82 +78,82 @@
 <input type="file" id="file-after" accept="image/jpeg,image/png,image/webp" tabindex="-1" aria-hidden="true" hidden>
 
 <main class="editor" id="editor">
-  <section class="card preview" aria-label="Preview">
-    <span class="pill-example" id="example-pill" hidden>Example</span>
+  <section class="card preview" aria-label="Preview" data-i18n-aria="previewRegion">
+    <span class="pill-example" id="example-pill" data-i18n="example" hidden>Example</span>
     <div class="stage" id="stage">
       <canvas id="ghost" aria-hidden="true"></canvas>
       <canvas id="preview" width="1080" height="1350" role="img" aria-label="Preview of Post before-and-after image"></canvas>
     </div>
     <p class="hint" id="hint">Click a Before or After box to add a photo, or drop one onto it</p>
-    <button type="button" class="btn-try" id="try-example">Try an example</button>
-    <p class="privacy">Your photos stay in this browser. Share client photos only with their permission.</p>
+    <button type="button" class="btn-try" id="try-example" data-i18n="tryExample">Try an example</button>
+    <p class="privacy" data-i18n="privacy">Your photos stay in this browser. Share client photos only with their permission.</p>
   </section>
 
-  <aside class="card panel" aria-label="Edit">
+  <aside class="card panel" aria-label="Edit" data-i18n-aria="editRegion">
     <div class="panel__body">
 
       <div class="group group--photos">
         <div class="group__head">
-          <span class="group__title">Photos</span>
+          <span class="group__title" data-i18n="photos">Photos</span>
           <div class="text-btns">
-            <button type="button" class="text-btn text-btn--violet" id="swap">Swap</button>
-            <button type="button" class="text-btn text-btn--plain" id="clear">Start over</button>
+            <button type="button" class="text-btn text-btn--violet" id="swap" data-i18n="swap">Swap</button>
+            <button type="button" class="text-btn text-btn--plain" id="clear" data-i18n="startOver">Start over</button>
           </div>
         </div>
         <div class="slots">
           <div class="slot" data-slot="before">
             <button type="button" class="slot__btn" aria-label="Add before photo">
               <span class="slot__thumb" aria-hidden="true" hidden></span>
-              <span class="slot__txt"><span class="slot__title">Before</span><span class="slot__action">Add photo</span></span>
+              <span class="slot__txt"><span class="slot__title" data-i18n="before">Before</span><span class="slot__action">Add photo</span></span>
             </button>
             <p class="slot__err" role="alert" hidden></p>
           </div>
           <div class="slot" data-slot="after">
             <button type="button" class="slot__btn" aria-label="Add after photo">
               <span class="slot__thumb" aria-hidden="true" hidden></span>
-              <span class="slot__txt"><span class="slot__title">After</span><span class="slot__action">Add photo</span></span>
+              <span class="slot__txt"><span class="slot__title" data-i18n="after">After</span><span class="slot__action">Add photo</span></span>
             </button>
             <p class="slot__err" role="alert" hidden></p>
           </div>
         </div>
       </div>
 
-      <div class="group" role="group" aria-label="Format">
-        <span class="group__title">Format</span>
+      <div class="group" role="group" aria-label="Format" data-i18n-aria="format">
+        <span class="group__title" data-i18n="format">Format</span>
         <div class="seg" id="formats"></div>
       </div>
 
-      <div class="group" role="group" aria-label="Style">
-        <span class="group__title">Style</span>
+      <div class="group" role="group" aria-label="Style" data-i18n-aria="style">
+        <span class="group__title" data-i18n="style">Style</span>
         <div class="styles" id="styles"></div>
       </div>
 
       <div class="fold">
         <button type="button" class="fold__btn" id="cust-toggle" aria-expanded="false" aria-controls="cust-body">
-          <span class="fold__txt"><span class="fold__title">Labels &amp; details</span><span class="fold__sub">Service, labels, studio name, disclaimer</span></span>
+          <span class="fold__txt"><span class="fold__title" data-i18n="custTitle">Labels &amp; details</span><span class="fold__sub" data-i18n="custSub">Service, labels, studio name, disclaimer</span></span>
           <svg class="fold__chev" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6l4 4 4-4"/></svg>
         </button>
         <div class="fold__body" id="cust-body" hidden>
           <label class="field field--first">
-            <span class="field__label">Service preset</span>
+            <span class="field__label" data-i18n="servicePreset">Service preset</span>
             <select class="input" id="preset"></select>
           </label>
           <div class="pair">
             <label class="field">
-              <span class="field__label">Before label</span>
+              <span class="field__label" data-i18n="beforeLabel">Before label</span>
               <input type="text" class="input" id="label-b" maxlength="24" placeholder="Before">
             </label>
             <label class="field">
-              <span class="field__label">After label</span>
+              <span class="field__label" data-i18n="afterLabel">After label</span>
               <input type="text" class="input" id="label-a" maxlength="24" placeholder="After">
             </label>
           </div>
           <label class="field">
-            <span class="field__label">Studio name or Instagram handle</span>
+            <span class="field__label" data-i18n="studioLabel">Studio name or Instagram handle</span>
             <input type="text" class="input" id="studio" maxlength="40" placeholder="@yourstudio">
           </label>
           <div class="switch-row">
-            <span id="note-label" class="switch-row__label">Show “Individual results may vary.”</span>
+            <span id="note-label" class="switch-row__label" data-i18n="noteLabel">Show “Individual results may vary.”</span>
             <button type="button" class="switch" id="note" role="switch" aria-checked="true" aria-labelledby="note-label"><span class="switch__knob"></span></button>
           </div>
         </div>
@@ -160,18 +161,18 @@
 
       <div class="fold">
         <button type="button" class="fold__btn" id="adj-toggle" aria-expanded="false" aria-controls="adj-body">
-          <span class="fold__txt"><span class="fold__title">Adjust photos</span><span class="fold__sub">Exposure, contrast, lighting, colour</span></span>
+          <span class="fold__txt"><span class="fold__title" data-i18n="adjTitle">Adjust photos</span><span class="fold__sub" data-i18n="adjSub">Exposure, contrast, lighting, colour</span></span>
           <svg class="fold__chev" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6l4 4 4-4"/></svg>
         </button>
         <div class="fold__body fold__body--adj" id="adj-body" hidden>
           <div class="adj-seg" id="adj-target">
-            <button type="button" class="adj-seg__btn" data-target="before" aria-pressed="true">Before photo</button>
-            <button type="button" class="adj-seg__btn" data-target="after" aria-pressed="false">After photo</button>
+            <button type="button" class="adj-seg__btn" data-target="before" aria-pressed="true" data-i18n="beforePhoto">Before photo</button>
+            <button type="button" class="adj-seg__btn" data-target="after" aria-pressed="false" data-i18n="afterPhoto">After photo</button>
           </div>
           <div id="sliders"></div>
           <div class="adj-actions">
             <button type="button" class="btn-outline-sm" id="adj-copy">Apply to after photo</button>
-            <button type="button" class="btn-text-sm" id="adj-reset" hidden>Reset</button>
+            <button type="button" class="btn-text-sm" id="adj-reset" data-i18n="reset" hidden>Reset</button>
           </div>
         </div>
       </div>
@@ -180,7 +181,7 @@
     <div class="panel__foot">
       <button type="button" class="btn-dl" id="download" aria-disabled="true">Download PNG</button>
       <p class="status" id="status" role="status" aria-live="polite">Add both photos to download.</p>
-      <a class="btn-listing" id="listing" href="https://cosready.ai/?utm_source=glowready&amp;utm_medium=app&amp;utm_campaign=cta" target="_blank" rel="noopener" hidden>List your business on COSReady →</a>
+      <a class="btn-listing" id="listing" href="https://cosready.ai/?utm_source=glowready&amp;utm_medium=app&amp;utm_campaign=cta" target="_blank" rel="noopener" data-i18n="listing" hidden>List your business on COSReady →</a>
     </div>
   </aside>
 </main>
@@ -188,58 +189,58 @@
 <div class="below">
   <section class="how" id="how-it-works" aria-labelledby="how-title">
     <div class="how__head">
-      <h2 class="h2" id="how-title">How to make a before and after photo for Instagram</h2>
-      <p class="how__lead">Free, no signup, and your photos never leave your browser.</p>
+      <h2 class="h2" id="how-title" data-i18n="howTitle">How to make a before and after photo for Instagram</h2>
+      <p class="how__lead" data-i18n="howLead">Free, no signup, and your photos never leave your browser.</p>
     </div>
     <ol class="steps">
-      <li class="step"><span class="step__n">1</span><h3 class="step__t">Add your photos</h3><p class="step__p">Click the Before or After box in the preview, or drop a photo straight onto it.</p></li>
-      <li class="step"><span class="step__n">2</span><h3 class="step__t">Pick a format and style</h3><p class="step__p">Post, Square or Story, in Classic, Polaroid, Overlap, Diagonal, Magazine or Blend.</p></li>
-      <li class="step"><span class="step__n">3</span><h3 class="step__t">Frame each photo</h3><p class="step__p">Drag to move, pinch or scroll to zoom, double-tap to show the full photo.</p></li>
-      <li class="step"><span class="step__n">4</span><h3 class="step__t">Download PNG</h3><p class="step__p">Get a full-resolution image with your studio name, ready to post.</p></li>
+      <li class="step"><span class="step__n">1</span><h3 class="step__t" data-i18n="step1t">Add your photos</h3><p class="step__p" data-i18n="step1p">Click the Before or After box in the preview, or drop a photo straight onto it.</p></li>
+      <li class="step"><span class="step__n">2</span><h3 class="step__t" data-i18n="step2t">Pick a format and style</h3><p class="step__p" data-i18n="step2p">Post, Square or Story, in Classic, Polaroid, Overlap, Diagonal, Magazine or Blend.</p></li>
+      <li class="step"><span class="step__n">3</span><h3 class="step__t" data-i18n="step3t">Frame each photo</h3><p class="step__p" data-i18n="step3p">Drag to move, pinch or scroll to zoom, double-tap to show the full photo.</p></li>
+      <li class="step"><span class="step__n">4</span><h3 class="step__t" data-i18n="step4t">Download PNG</h3><p class="step__p" data-i18n="step4p">Get a full-resolution image with your studio name, ready to post.</p></li>
     </ol>
   </section>
 
   <section class="who" id="who" aria-labelledby="who-title">
-    <h2 class="h2" id="who-title">Made for beauty professionals</h2>
+    <h2 class="h2" id="who-title" data-i18n="whoTitle">Made for beauty professionals</h2>
     <ul class="chips">
-      <li>Lash &amp; brow artists</li>
-      <li>Skin clinics &amp; estheticians</li>
-      <li>Injectables &amp; body contouring</li>
-      <li>Hair salons &amp; barbers</li>
-      <li>Nail techs</li>
-      <li>Makeup artists</li>
-      <li>Permanent makeup</li>
-      <li>Spray tan &amp; waxing</li>
-      <li>Teeth whitening</li>
-      <li>Tattoo removal</li>
-      <li>Beauty marketing agencies</li>
+      <li data-i18n="who1">Lash &amp; brow artists</li>
+      <li data-i18n="who2">Skin clinics &amp; estheticians</li>
+      <li data-i18n="who3">Injectables &amp; body contouring</li>
+      <li data-i18n="who4">Hair salons &amp; barbers</li>
+      <li data-i18n="who5">Nail techs</li>
+      <li data-i18n="who6">Makeup artists</li>
+      <li data-i18n="who7">Permanent makeup</li>
+      <li data-i18n="who8">Spray tan &amp; waxing</li>
+      <li data-i18n="who9">Teeth whitening</li>
+      <li data-i18n="who10">Tattoo removal</li>
+      <li data-i18n="who11">Beauty marketing agencies</li>
     </ul>
   </section>
 
   <section class="faq" id="faq" aria-labelledby="faq-title">
     <div class="faq__head">
-      <h2 class="h2" id="faq-title">Questions</h2>
-      <p class="faq__lead">Everything about GlowReady, the free before and after photo editor by COSReady.</p>
+      <h2 class="h2" id="faq-title" data-i18n="faqTitle">Questions</h2>
+      <p class="faq__lead" data-i18n="faqLead">Everything about GlowReady, the free before and after photo editor by COSReady.</p>
     </div>
     <div class="faq__list">
-      <details><summary><span>What is the best free before and after photo app for salons?</span><span class="faq__plus" aria-hidden="true">+</span></summary><p class="faq__a">GlowReady by COSReady is a free, open-source before and after photo editor made specifically for beauty businesses. It includes 19 service presets, 6 layout styles and an automatic “individual results may vary” disclaimer, and it needs no signup.</p></details>
-      <details><summary><span>Is GlowReady really free?</span><span class="faq__plus" aria-hidden="true">+</span></summary><p class="faq__a">Yes. Every feature is free with no watermark paywall, and the code is MIT-licensed. Exports carry a small “Made with GlowReady · by COSReady” credit.</p></details>
-      <details><summary><span>Are my client photos uploaded anywhere?</span><span class="faq__plus" aria-hidden="true">+</span></summary><p class="faq__a">No. GlowReady processes photos in your browser with HTML5 Canvas. There is no upload, no server storage and no account.</p></details>
-      <details><summary><span>What sizes can I export?</span><span class="faq__plus" aria-hidden="true">+</span></summary><p class="faq__a">Instagram post (1080 × 1350), square (1080 × 1080) and story (1080 × 1920), as full-resolution PNG files.</p></details>
-      <details><summary><span>Does it add a results disclaimer?</span><span class="faq__plus" aria-hidden="true">+</span></summary><p class="faq__a">Yes. “Individual results may vary.” is added to every image by default. You can turn it off in Labels &amp; details.</p></details>
-      <details><summary><span>Can I add my studio name or Instagram handle?</span><span class="faq__plus" aria-hidden="true">+</span></summary><p class="faq__a">Yes. Add up to 40 characters, and it appears on every export.</p></details>
-      <details><summary><span>Does it work on iPhone and Android?</span><span class="faq__plus" aria-hidden="true">+</span></summary><p class="faq__a">Yes. It runs in Safari and Chrome on phones, with touch gestures for framing photos. You don't need to install an app.</p></details>
-      <details><summary><span>Who makes GlowReady?</span><span class="faq__plus" aria-hidden="true">+</span></summary><p class="faq__a">COSReady, a platform that helps clients find local beauty and wellness businesses and helps businesses get discovered through Beauty Map and AI search.</p></details>
-      <details><summary><span>How can my salon get found by clients online?</span><span class="faq__plus" aria-hidden="true">+</span></summary><p class="faq__a">Share before-and-after photos made with GlowReady on your socials, and create a free business listing on COSReady Beauty Map. Clients use COSReady to find lash, nail, skin and hair studios near them, and the listing helps your business show up in AI search answers too.</p></details>
+      <details><summary><span data-i18n="q1">What is the best free before and after photo app for salons?</span><span class="faq__plus" aria-hidden="true">+</span></summary><p class="faq__a" data-i18n="a1">GlowReady by COSReady is a free, open-source before and after photo editor made specifically for beauty businesses. It includes 19 service presets, 6 layout styles and an automatic “individual results may vary” disclaimer, and it needs no signup.</p></details>
+      <details><summary><span data-i18n="q2">Is GlowReady really free?</span><span class="faq__plus" aria-hidden="true">+</span></summary><p class="faq__a" data-i18n="a2">Yes. Every feature is free with no watermark paywall, and the code is MIT-licensed. Exports carry a small “Made with GlowReady · by COSReady” credit.</p></details>
+      <details><summary><span data-i18n="q3">Are my client photos uploaded anywhere?</span><span class="faq__plus" aria-hidden="true">+</span></summary><p class="faq__a" data-i18n="a3">No. GlowReady processes photos in your browser with HTML5 Canvas. There is no upload, no server storage and no account.</p></details>
+      <details><summary><span data-i18n="q4">What sizes can I export?</span><span class="faq__plus" aria-hidden="true">+</span></summary><p class="faq__a" data-i18n="a4">Instagram post (1080 × 1350), square (1080 × 1080) and story (1080 × 1920), as full-resolution PNG files.</p></details>
+      <details><summary><span data-i18n="q5">Does it add a results disclaimer?</span><span class="faq__plus" aria-hidden="true">+</span></summary><p class="faq__a" data-i18n="a5">Yes. “Individual results may vary.” is added to every image by default. You can turn it off in Labels &amp; details.</p></details>
+      <details><summary><span data-i18n="q6">Can I add my studio name or Instagram handle?</span><span class="faq__plus" aria-hidden="true">+</span></summary><p class="faq__a" data-i18n="a6">Yes. Add up to 40 characters, and it appears on every export.</p></details>
+      <details><summary><span data-i18n="q7">Does it work on iPhone and Android?</span><span class="faq__plus" aria-hidden="true">+</span></summary><p class="faq__a" data-i18n="a7">Yes. It runs in Safari and Chrome on phones, with touch gestures for framing photos. You don't need to install an app.</p></details>
+      <details><summary><span data-i18n="q8">Who makes GlowReady?</span><span class="faq__plus" aria-hidden="true">+</span></summary><p class="faq__a" data-i18n="a8">COSReady, a platform that helps clients find local beauty and wellness businesses and helps businesses get discovered through Beauty Map and AI search.</p></details>
+      <details><summary><span data-i18n="q9">How can my salon get found by clients online?</span><span class="faq__plus" aria-hidden="true">+</span></summary><p class="faq__a" data-i18n="a9">Share before-and-after photos made with GlowReady on your socials, and create a free business listing on COSReady Beauty Map. Clients use COSReady to find lash, nail, skin and hair studios near them, and the listing helps your business show up in AI search answers too.</p></details>
     </div>
   </section>
 
   <section class="cta" aria-labelledby="cta-title">
     <div class="cta__txt">
-      <h2 class="h2" id="cta-title">Get your beauty business found</h2>
-      <p class="cta__p">COSReady helps local beauty businesses get discovered, by clients and by AI search. Create a free listing on Beauty Map.</p>
+      <h2 class="h2" id="cta-title" data-i18n="ctaTitle">Get your beauty business found</h2>
+      <p class="cta__p" data-i18n="ctaP">COSReady helps local beauty businesses get discovered, by clients and by AI search. Create a free listing on Beauty Map.</p>
     </div>
-    <a class="btn-cta" href="https://cosready.ai/?utm_source=glowready&amp;utm_medium=app&amp;utm_campaign=cta" target="_blank" rel="noopener">List your business free →</a>
+    <a class="btn-cta" href="https://cosready.ai/?utm_source=glowready&amp;utm_medium=app&amp;utm_campaign=cta" target="_blank" rel="noopener" data-i18n="ctaBtn">List your business free →</a>
   </section>
 </div>
 
@@ -250,11 +251,11 @@
       <span>by</span>
       <a href="https://cosready.ai/?utm_source=glowready&amp;utm_medium=app&amp;utm_campaign=footer" target="_blank" rel="noopener"><img src="assets/cosready-mark.png" alt="" width="18" height="16">COSReady</a>
     </div>
-    <nav class="foot-nav" aria-label="Footer">
-      <a href="#how-it-works">How it works</a>
-      <a href="#faq">FAQ</a>
-      <a href="https://github.com/COSReady-Public/GlowReady" target="_blank" rel="noopener">Open source on GitHub</a>
-      <span class="foot-nav__legal">MIT licence · © 2026 COSReady</span>
+    <nav class="foot-nav" aria-label="Footer" data-i18n-aria="footerNav">
+      <a href="#how-it-works" data-i18n="howLink">How it works</a>
+      <a href="#faq" data-i18n="faqLink">FAQ</a>
+      <a href="https://github.com/COSReady-Public/GlowReady" target="_blank" rel="noopener" data-i18n="github">Open source on GitHub</a>
+      <span class="foot-nav__legal" data-i18n="legal">MIT licence · © 2026 COSReady</span>
     </nav>
   </div>
 </footer>
