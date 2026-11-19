@@ -239,6 +239,12 @@ select.input { -webkit-appearance: none; appearance: none; padding-right: 40px; 
   .panel__body { overflow: visible; }
   .stage { width: 100%; }
   .stage.is-story { width: 78%; }
+  /* Closing CTA card and footer centred */
+  .cta { flex-direction: column; justify-content: center; text-align: center; }
+  .cta__txt { align-items: center; }
+  .site-footer__in { flex-direction: column; justify-content: center; text-align: center; }
+  .foot-nav { justify-content: center; }
+  .foot-nav__legal { flex-basis: 100%; }
 }
 
 /* Phones: the visitor count sits under the Free pill so the header keeps one row */
