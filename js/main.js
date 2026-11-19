@@ -8,6 +8,7 @@ import { attachGestures } from './gestures.js';
 import { exportPNG, countExport } from './export.js';
 import { ADJUSTMENTS, supportsCanvasFilter } from './adjust.js';
 import { t, presetText, translatePage } from './i18n.js';
+import { track, trackVisit } from './track.js';
 
 const $ = id => document.getElementById(id);
 const KEYS = ['before', 'after'];
@@ -338,6 +339,24 @@ function render(s) {
 }
 
 subscribe(render);
+
+/* ---------- usage ---------- */
+
+trackVisit().then(n => {
+  if (n == null) return;
+  setText($('visitors-text'), t(n === 1 ? 'visitorOne' : 'visitors', { count: n.toLocaleString('en-US') }));
+  setHidden($('visitors'), false);
+});
+
+// "Added both photos": once each time the visitor's own pair becomes complete.
+let hadPair = false;
+subscribe(s => {
+  const pair = !!(s.before && s.after && !s.before.isSample && !s.after.isSample);
+  if (pair && !hadPair) track('photos');
+  hadPair = pair;
+});
+
+document.querySelectorAll('#listing, .btn-cta').forEach(a => a.addEventListener('click', () => track('cta')));
 render(getState());
 document.documentElement.classList.remove('i18n-pending'); // locale.js hid the page until now
 

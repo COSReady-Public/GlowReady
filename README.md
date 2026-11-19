@@ -58,7 +58,7 @@ The editor accepts static JPEG, PNG and WebP files up to 20 MiB and 48 megapixel
 - Photos are decoded and drawn **in your browser** with HTML5 Canvas. There is no upload path, no server and no database.
 - Images, filenames, labels and settings are never sent or stored.
 - Exported PNGs are redrawn from pixels, so they carry **no EXIF or GPS metadata**.
-- An anonymous, cookieless export counter (format, style and preset only) helps us measure usage. It respects Do Not Track.
+- Anonymous, cookieless usage counts help us measure usage: visits (one per IP every 30 minutes; the IP is not stored), photo pairs added, downloads (format, style and preset only) and "List your business" clicks, each with the page language and an approximate city. They respect Do Not Track.
 - Once loaded, the editor works offline.
 
 Please share client photos only with their permission.

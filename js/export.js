@@ -2,8 +2,7 @@
 
 import { draw } from './render.js';
 import { t } from './i18n.js';
-
-const VERSION = '1.0';
+import { track } from './track.js';
 
 /**
  * Render a snapshot off-screen and download it. Resolves true when downloaded,
@@ -36,25 +35,7 @@ export function exportPNG(snap, isCurrent = () => true) {
   });
 }
 
-/**
- * Cookieless usage count, sent only after a successful export. Carries format,
- * style and preset only: never image data, filenames, labels, studio names or IDs.
- * Skipped under Do Not Track; never affects the export.
- */
+/** Count a successful export (format, style and preset only); never affects the export. */
 export function countExport(snap) {
-  try {
-    if (navigator.doNotTrack === '1' || window.doNotTrack === '1') return;
-    if (!window.fetch) return;
-    const onCosready = /(^|\.)cosready\.ai$/.test(location.hostname);
-    const url = onCosready ? '/api/glowready-count' : 'https://cosready.ai/api/glowready-count';
-    // fetch rather than sendBeacon: sendBeacon always sends cookies, and §9 says none.
-    fetch(url, {
-      method: 'POST',
-      body: JSON.stringify({ v: VERSION, f: snap.format, t: snap.template, p: snap.presetId }),
-      headers: { 'Content-Type': 'text/plain;charset=UTF-8' },
-      credentials: 'omit',
-      mode: 'no-cors',
-      keepalive: true,
-    }).catch(() => {});
-  } catch (e) { /* fail silent */ }
+  track('download', { f: snap.format, t: snap.template, p: snap.presetId });
 }

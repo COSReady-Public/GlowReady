@@ -58,11 +58,15 @@ const EN = {
   "cvAddBefore": "Add before photo",
   "cvAddAfter": "Add after photo",
   "cvClickOrDrop": "Click or drop · JPG, PNG, WebP",
+  "visitors": "{count} visitors",
+  "visitorOne": "{count} visitor",
 };
 
 const ZH_CN = {
   "h1": "美业从业者免费前后对比照片编辑器",
   "freePill": "免费 · 无需注册",
+  "visitors": "{count} 位访客",
+  "visitorOne": "{count} 位访客",
   "previewRegion": "预览",
   "example": "示例",
   "tryExample": "试用示例",
@@ -210,6 +214,8 @@ const ZH_CN = {
 const ZH_TW = {
   "h1": "美業從業者免費前後對比照片編輯器",
   "freePill": "免費 · 無需註冊",
+  "visitors": "{count} 位訪客",
+  "visitorOne": "{count} 位訪客",
   "previewRegion": "預覽",
   "example": "範例",
   "tryExample": "試用範例",
